@@ -622,8 +622,9 @@ if 'user_profile' not in st.session_state:
     st.session_state.user_profile = {"name": "", "email": "", "address": ""}
 if 'notifications' not in st.session_state:
     st.session_state.notifications = []
-if 'user_logged_in' not in st.session_state:
-    st.session_state.user_logged_in = False
+
+if st.session_state.current_page in ["login", "signup"]:
+    st.session_state.current_page = "home"
 
 # Enhanced Product Data with More Details
 products = {
@@ -841,27 +842,18 @@ with st.sidebar:
     st.markdown('<div class="brand-logo">🛒</div><div class="brand-details"><h2>LW Grocery Store</h2><p>AI-Powered Grocery Experience</p></div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    if st.session_state.get('user_logged_in', False):
-        st.markdown('<div class="sidebar-user-card">', unsafe_allow_html=True)
-        st.markdown('<div class="user-avatar">W</div><div class="user-meta"><p class="user-name">Wesley Oyoría</p><p class="user-status">Gold Member ⭐</p></div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-user-card">', unsafe_allow_html=True)
+    st.markdown('<div class="user-avatar">W</div><div class="user-meta"><p class="user-name">Wesley Oyoría</p><p class="user-status">Gold Member ⭐</p></div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        nav_items = [
-            ("🏠 Home", "home", "nav_home"),
-            ("🛍️ Shop", "shop", "nav_shop"),
-            ("🤖 AI Assistant", "ai", "nav_ai"),
-            ("🛒 Cart", "checkout", "nav_cart"),
-            ("📦 Orders", "history", "nav_orders"),
-            ("👤 Profile", "profile", "nav_profile")
-        ]
-    else:
-        nav_items = [
-            ("🏠 Home", "home", "nav_home"),
-            ("🛍️ Shop", "shop", "nav_shop"),
-            ("🤖 AI Assistant", "ai", "nav_ai"),
-            ("🔐 Login", "login", "nav_login"),
-            ("📝 Sign Up", "signup", "nav_signup")
-        ]
+    nav_items = [
+        ("🏠 Home", "home", "nav_home"),
+        ("🛍️ Shop", "shop", "nav_shop"),
+        ("🤖 AI Assistant", "ai", "nav_ai"),
+        ("🛒 Cart", "checkout", "nav_cart"),
+        ("📦 Orders", "history", "nav_orders"),
+        ("👤 Profile", "profile", "nav_profile")
+    ]
 
     for label, page, key in nav_items:
         if st.button(label, key=key, use_container_width=True):
@@ -872,40 +864,30 @@ with st.sidebar:
 
     st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
 
-    if st.session_state.get('user_logged_in', False):
-        cart_count = sum(details['quantity'] for details in st.session_state.cart.values())
-        cart_total = sum(details['price'] * details['quantity'] for details in st.session_state.cart.values())
-        st.markdown('<div class="sidebar-summary">', unsafe_allow_html=True)
-        st.markdown(f'<p class="summary-label">Cart items</p><h3>{cart_count}</h3><p class="summary-value">${cart_total:.2f}</p>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+    cart_count = sum(details['quantity'] for details in st.session_state.cart.values())
+    cart_total = sum(details['price'] * details['quantity'] for details in st.session_state.cart.values())
+    st.markdown('<div class="sidebar-summary">', unsafe_allow_html=True)
+    st.markdown(f'<p class="summary-label">Cart items</p><h3>{cart_count}</h3><p class="summary-value">${cart_total:.2f}</p>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        if st.button("🚪 Sign Out", key="nav_signout", use_container_width=True, type="secondary"):
-            st.session_state.user_logged_in = False
-            st.session_state.current_page = "login"
-            st.session_state.cart = {}
-            st.session_state.notifications.append("Signed out successfully.")
+    st.markdown('<div class="sidebar-note">Fast delivery in under 30 minutes with fresh local produce.</div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+
+    if st.session_state.cart:
+        st.markdown('### 🛒 Current Cart')
+        total = 0
+        for item, details in st.session_state.cart.items():
+            st.write(f"**{item}** — {details['quantity']} × ${details['price']:.2f}")
+            total += details['price'] * details['quantity']
+        st.markdown(f"**Total:** ${total:.2f}")
+        if st.button("Proceed to Checkout", key="sidebar_checkout", use_container_width=True, type="primary"):
+            st.session_state.checkout = True
+            st.session_state.current_page = "checkout"
             st.rerun()
-
-        st.markdown('<div class="sidebar-note">Fast delivery in under 30 minutes with fresh local produce.</div>', unsafe_allow_html=True)
-
-        st.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-
-        if st.session_state.cart:
-            st.markdown('### 🛒 Current Cart')
-            total = 0
-            for item, details in st.session_state.cart.items():
-                st.write(f"**{item}** — {details['quantity']} × ${details['price']:.2f}")
-                total += details['price'] * details['quantity']
-            st.markdown(f"**Total:** ${total:.2f}")
-            if st.button("Proceed to Checkout", key="sidebar_checkout", use_container_width=True, type="primary"):
-                st.session_state.checkout = True
-                st.session_state.current_page = "checkout"
-                st.rerun()
-        else:
-            st.info("Your cart is currently empty.")
-            st.write("Add items from the shop to see them here.")
     else:
-        st.markdown('<div class="sidebar-note">Create an account to access full ordering and AI personalization.</div>', unsafe_allow_html=True)
+        st.info("Your cart is currently empty.")
+        st.write("Add items from the shop to see them here.")
 
 # Main Content Based on Current Page
 if st.session_state.checkout or st.session_state.current_page == "checkout":
@@ -1368,11 +1350,23 @@ elif st.session_state.current_page == "ai":
         type="password",
         help="Get your free API key at console.groq.com",
         key="ai_api_key",
-        value=st.session_state.ai_api_key
+        value=st.session_state.ai_api_key,
+        label_visibility="visible"
+    )
+
+    if not api_key and default_api_key:
+        api_key = default_api_key
+
+    model_option = st.selectbox(
+        "Choose AI model",
+        ["llama3-8b-8192", "openai/gpt-oss-120b"],
+        index=0,
+        help="Choose a model that your Groq API key is authorized to use."
     )
 
     if api_key:
-        st.success("✅ AI Assistant is ready!")
+        key_source = "secrets/env" if api_key == default_api_key and default_api_key else "manual"
+        st.success(f"✅ AI Assistant is ready! (key source: {key_source})")
 
         # Quick Suggestion Buttons
         st.subheader("💡 Quick Suggestions")
@@ -1415,7 +1409,7 @@ Available product categories: Fruits & Vegetables, Dairy & Eggs, Meat & Seafood,
 Keep your response practical and focused on helping the customer make good shopping decisions."""
 
                     completion = client.chat.completions.create(
-                        model="llama3-8b-8192",
+                        model=model_option,
                         messages=[{"role": "user", "content": prompt}]
                     )
 
