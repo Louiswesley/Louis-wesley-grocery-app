@@ -1,6 +1,8 @@
 # Louis Wesley Grocery Store 🛒
 
 **Student Name: OYORIA WESLEY**
+**Student mattno:FPS/CSC/24/90070
+**Student iD:E1153183
 
 A modern, AI-powered grocery shopping application built with Streamlit, featuring a complete e-commerce experience with shopping cart, checkout, order history, and an intelligent AI shopping assistant.
 
