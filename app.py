@@ -1334,4 +1334,10 @@ with footer_col4:
     st.caption("Downtown District")
 
 st.caption("---")
-st.caption("© 2024 Louis Wesley Grocery Store. Built with ❤️ using Streamlit and AI.")
+st.caption("© 2026 Louis Wesley Grocery Store. Built with ❤️ using Streamlit and AI.")
+st.caption("**Student Information:**")
+st.caption("Name: OYORIA WESLEY")
+st.caption("Matric No: FPS/CSC/24/90070")
+st.caption("Student ID: E1153183")
+st.caption("Course: CSC206 - WEB DESIGN AND DEVELOPMENT")
+st.caption("Date: May 8, 2026")
