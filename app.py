@@ -20,65 +20,86 @@ st.set_page_config(
 # Custom CSS for Modern UI
 st.markdown("""
 <style>
-    /* Global Styles */
+    :root {
+        color-scheme: dark;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background: radial-gradient(circle at top, rgba(59, 179, 255, 0.14), transparent 24%),
+                    radial-gradient(circle at bottom right, rgba(205, 88, 255, 0.14), transparent 24%),
+                    linear-gradient(180deg, #08101f 0%, #0c182d 100%);
+        overflow-x: hidden;
+    }
+
+    .stApp {
+        background: transparent !important;
+    }
+
     .main-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 2rem;
-        border-radius: 15px;
+        background: rgba(14, 23, 39, 0.88);
+        color: #f5f7ff;
+        padding: 2.5rem 2rem;
+        border-radius: 28px;
         margin-bottom: 2rem;
-        text-align: center;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        text-align: left;
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .nav-bar {
-        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-        padding: 1rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
+        background: rgba(12, 18, 33, 0.92);
+        padding: 1rem 1rem 0.9rem;
+        border-radius: 28px;
+        margin-bottom: 1.8rem;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .nav-button {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #e8eef9;
+        padding: 0.95rem 1.4rem;
+        border-radius: 999px;
         font-weight: 600;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
+        letter-spacing: 0.02em;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(16px);
     }
 
     .nav-button:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.22);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
     }
 
     .nav-button-active {
-        background: rgba(255, 255, 255, 0.9) !important;
-        color: #4CAF50 !important;
-        border-color: white !important;
-        font-weight: bold !important;
+        background: linear-gradient(135deg, #5d8cff 0%, #2b76ff 100%) !important;
+        color: white !important;
+        border-color: rgba(255, 255, 255, 0.28) !important;
+        box-shadow: 0 18px 30px rgba(63, 125, 255, 0.35) !important;
     }
 
     .product-card {
-        background: white;
-        border-radius: 15px;
+        background: rgba(14, 23, 39, 0.88);
+        border-radius: 22px;
         padding: 1.5rem;
         margin: 1rem 0;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        border: 1px solid #f0f0f0;
-        transition: all 0.3s ease;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
         overflow: hidden;
+        backdrop-filter: blur(18px);
     }
 
     .product-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        box-shadow: 0 26px 70px rgba(0, 0, 0, 0.28);
     }
 
     .product-card::before {
@@ -87,131 +108,206 @@ st.markdown("""
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #4CAF50, #FF5722);
+        height: 3px;
+        background: linear-gradient(90deg, rgba(91, 182, 255, 0.9), rgba(248, 146, 231, 0.9));
     }
 
     .product-image {
-        font-size: 3rem;
+        font-size: 3.2rem;
         text-align: center;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
     }
 
     .product-price {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #4CAF50;
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #7ee8fa;
         margin: 0.5rem 0;
     }
 
     .cart-badge {
-        background: #FF5722;
+        background: #4db6ff;
         color: white;
         border-radius: 50%;
-        padding: 0.2rem 0.5rem;
+        padding: 0.35rem 0.55rem;
         font-size: 0.8rem;
-        font-weight: bold;
+        font-weight: 700;
         position: absolute;
         top: -10px;
         right: -10px;
     }
 
     .success-message {
-        background: linear-gradient(135deg, #4CAF50, #66BB6A);
-        color: white;
+        background: rgba(18, 100, 80, 0.92);
+        color: #f8fff4;
         padding: 1rem;
-        border-radius: 10px;
+        border-radius: 16px;
         margin: 1rem 0;
-        animation: slideIn 0.5s ease-out;
+        animation: slideIn 0.45s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     @keyframes slideIn {
-        from { transform: translateY(-20px); opacity: 0; }
+        from { transform: translateY(-16px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
     }
 
     .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 3rem;
-        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f4f7ff;
+        padding: 3rem 2rem;
+        border-radius: 32px;
         margin: 2rem 0;
-        text-align: center;
         position: relative;
         overflow: hidden;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 60px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(20px);
     }
 
     .hero-section::before {
         content: '';
         position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
-        animation: float 20s infinite linear;
+        top: -20%;
+        right: -15%;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 60%);
+        filter: blur(28px);
     }
 
-    @keyframes float {
-        0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
-        100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        bottom: -25%;
+        left: -15%;
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(95, 216, 255, 0.16), transparent 54%);
+        filter: blur(28px);
     }
 
     .metric-card {
-        background: white;
+        background: rgba(255, 255, 255, 0.08);
         padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.18);
         text-align: center;
-        border: 1px solid #f0f0f0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f4f7ff;
     }
 
     .checkout-summary {
-        background: linear-gradient(135deg, #FFF3E0, #FFCC02);
-        padding: 2rem;
-        border-radius: 15px;
+        background: rgba(7, 15, 32, 0.94);
+        padding: 2.2rem;
+        border-radius: 30px;
         margin: 2rem 0;
-        border: 2px solid #FF9800;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26);
+        backdrop-filter: blur(22px);
     }
 
     .ai-chat-bubble {
-        background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
-        border-radius: 15px;
-        padding: 1.5rem;
+        background: rgba(10, 18, 35, 0.95);
+        border-radius: 28px;
+        padding: 1.8rem;
         margin: 1rem 0;
-        border-left: 4px solid #2196F3;
+        border-left: 4px solid rgba(82, 180, 255, 0.9);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.22);
+    }
+
+    .glass-panel {
+        background: rgba(16, 24, 44, 0.9);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+        backdrop-filter: blur(20px);
     }
 
     .stButton>button {
-        border-radius: 25px !important;
-        font-weight: 600 !important;
-        transition: all 0.3s ease !important;
+        border-radius: 999px !important;
+        font-weight: 700 !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+        min-height: 48px;
     }
 
     .stButton>button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 14px 30px rgba(0,0,0,0.18) !important;
     }
 
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: #f8f9fa;
-        padding: 0.5rem;
-        border-radius: 10px;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.6rem;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(18px);
     }
 
     .stTabs [data-baseweb="tab"] {
-        border-radius: 8px !important;
-        background: white !important;
-        border: 1px solid #e0e0e0 !important;
+        border-radius: 18px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #e8eef9 !important;
     }
 
     .stTabs [aria-selected="true"] {
-        background: #4CAF50 !important;
-        color: white !important;
+        background: linear-gradient(135deg, rgba(93, 140, 255, 0.95), rgba(53, 187, 255, 0.95)) !important;
+        color: #ffffff !important;
+        box-shadow: 0 16px 30px rgba(43, 118, 255, 0.18) !important;
+    }
+
+    .css-18ni7ap.e8zbici2 {
+        padding: 0 !important;
+    }
+
+    .css-1gk3yp4.egzxvld3 {
+        padding: 0 !important;
+    }
+
+    .css-1d391kg {
+        background-color: transparent !important;
+    }
+
+    @media (max-width: 900px) {
+        .app-shell {
+            padding: 1rem;
+        }
+
+        .nav-bar {
+            padding: 0.8rem 0.6rem 0.7rem;
+        }
+
+        .main-header {
+            padding: 1.8rem 1rem;
+        }
+
+        .product-card {
+            margin: 1rem 0;
+        }
+    }
+
+    .app-shell {
+        max-width: 1440px;
+        margin: 0 auto 2rem;
+        padding: 1.8rem 2rem 2.5rem;
+        border-radius: 36px;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 40px 120px rgba(0,0,0,0.25);
+        background: rgba(4, 11, 23, 0.88);
+        backdrop-filter: blur(28px);
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        letter-spacing: 0.01em;
+        margin-bottom: 1rem;
+        color: #f7fbff;
     }
 </style>
 """, unsafe_allow_html=True)
+
+st.markdown('<div class="app-shell">', unsafe_allow_html=True)
 
 # Initialize session state
 if 'current_page' not in st.session_state:
@@ -1341,3 +1437,5 @@ st.caption("Matric No: FPS/CSC/24/90070")
 st.caption("Student ID: E1153183")
 st.caption("Course: CSC206 - WEB DESIGN AND DEVELOPMENT")
 st.caption("Date: May 8, 2026")
+
+st.markdown('</div>', unsafe_allow_html=True)
